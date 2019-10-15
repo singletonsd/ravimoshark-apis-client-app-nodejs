@@ -31,7 +31,7 @@ API_SPEC_WEB="https://ravimosharksas.gitlab.io/apis/client/documentation/openapi
 API_SPEC_LOCAL="../documentation/dist/openapi.yaml"
 VERSION="1.0.0"
 function usage(){
-    echo "1 - "
+    echo "1 - anything to work with local spec located at ${API_SPEC_LOCAL}"
 }
 
 if [ $# -ge 1 ]; then
