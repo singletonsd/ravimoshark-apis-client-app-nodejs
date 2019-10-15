@@ -49,8 +49,8 @@ export class Utilities {
         return this.checkVariableNotNull(parameters, res, "filter");
     }
 
-    public static checkAndDelete(
-            parameters: SwaggerRequestParameters, idName?: string, res?: CustomResponse): ParametersIdDeleted | null {
+    public static checkAndDelete( parameters: SwaggerRequestParameters, idName?: string
+                                , res?: CustomResponse): ParametersIdDeleted | null {
         const response: ParametersIdDeleted = {
             deleted: this.checkDeleted(parameters),
             id: this.checkVariableNotNull(parameters, undefined, idName)

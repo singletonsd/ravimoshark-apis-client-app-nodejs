@@ -5,16 +5,13 @@ import { ParametersComplete } from "../../utils/utilities";
 import { Addresses, Clients } from "../entities";
 
 export class DatabaseUtilities {
-  public static getFindOneObject(
-    id: number,
-    deleted: Deleted,
-    entity: ObjectType<BaseEntity>,
-    relations?: Array<string>,
-    idUser?: number
-  ): FindOneOptions {
-    const whereObject: { id: number; idUser?: number } = { id };
-    if (idUser) {
-      whereObject.idUser = idUser;
+  public static getFindOneObject(id: number | string, deleted: Deleted, entity: ObjectType<BaseEntity>
+                              ,  relations?: Array<string>): FindOneOptions {
+    const whereObject: { id?: number | string, refClient?: number | string } = { };
+    if (entity === Clients) {
+      whereObject.refClient = id;
+    } else {
+      whereObject.id = id;
     }
     const object: FindOneOptions<typeof entity> = {
       where: this.addDeletedParam(deleted, whereObject)
@@ -24,12 +21,8 @@ export class DatabaseUtilities {
   }
 
   public static getFindObject(
-    params: ParametersComplete,
-    entity: ObjectType<BaseEntity>,
-    relations?: Array<string>,
-    selections?: Array<string>,
-    idUser?: number
-  ): FindManyOptions {
+    params: ParametersComplete, entity: ObjectType<BaseEntity>,
+    relations?: Array<string>, selections?: Array<string>): FindManyOptions {
     let whereObject: { idUser?: number } = {};
     if (params.filter) {
       try {
@@ -37,9 +30,6 @@ export class DatabaseUtilities {
       } catch (e) {
         LoggerUtility.warn("orderBy parameter provided is not in JSON format.", params.orderBy);
       }
-    }
-    if (idUser) {
-      whereObject.idUser = idUser;
     }
     const object: FindManyOptions<typeof entity> = {
       skip: params.skip,
@@ -94,10 +84,7 @@ export class DatabaseUtilities {
     return params;
   }
 
-  public static addRelations(
-    entity: ObjectType<BaseEntity>,
-    relations?: Array<string>
-  ): Array<string> {
+  public static addRelations(entity: ObjectType<BaseEntity>, relations?: Array<string>): Array<string> {
     let finalRelations: Array<string>;
     if (relations) {
       finalRelations = relations;
@@ -109,10 +96,7 @@ export class DatabaseUtilities {
     return finalRelations;
   }
 
-  public static addSelections(
-    entity: ObjectType<BaseEntity>,
-    relations?: Array<string>
-  ): Array<string> {
+  public static addSelections(entity: ObjectType<BaseEntity>, relations?: Array<string>): Array<string> {
     let finalSelections: Array<string> = new Array<string>();
     if (relations) {
       finalSelections.push(...relations);

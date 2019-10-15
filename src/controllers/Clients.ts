@@ -19,7 +19,7 @@ module.exports.addClient = (req: CustomRequest, res: CustomResponse, next: Custo
 };
 
 module.exports.deleteClient = (req: CustomRequest, res: CustomResponse, next: CustomNext) => {
-  const refContract = Utilities.checkVariableNotNull(req.swagger.params, res, "refContract");
+  const refContract = Utilities.checkAndDelete(req.swagger.params, "refClient", res);
   if (!refContract) {
     return;
   }
@@ -45,7 +45,7 @@ module.exports.editClient = (req: CustomRequest, res: CustomResponse, next: Cust
 };
 
 module.exports.getClientById = (req: CustomRequest, res: CustomResponse, next: CustomNext) => {
-  const params: ParametersIdDeleted = Utilities.checkAndDelete(req.swagger.params, "refContract", res);
+  const params: ParametersIdDeleted = Utilities.checkAndDelete(req.swagger.params, "refClient", res);
   if (!params) {
       return;
   }

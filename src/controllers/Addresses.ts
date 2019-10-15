@@ -19,7 +19,7 @@ module.exports.addAddress = (req: CustomRequest, res: CustomResponse, next: Cust
 };
 
 module.exports.deleteAddress = (req: CustomRequest, res: CustomResponse, next: CustomNext) => {
-  const refContract = Utilities.checkVariableNotNull(req.swagger.params, res, "refContract");
+  const refContract = Utilities.checkIdAndDelete(req.swagger.params, res);
   if (!refContract) {
     return;
   }
@@ -45,7 +45,7 @@ module.exports.editAddress = (req: CustomRequest, res: CustomResponse, next: Cus
 };
 
 module.exports.getAddressById = (req: CustomRequest, res: CustomResponse, next: CustomNext) => {
-  const params: ParametersIdDeleted = Utilities.checkAndDelete(req.swagger.params, "refContract", res);
+  const params: ParametersIdDeleted = Utilities.checkIdAndDelete(req.swagger.params, res);
   if (!params) {
       return;
   }
