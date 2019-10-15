@@ -22,7 +22,7 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 README.md
-src/api/swagger.yaml
-/.swagger-codegen/
-src/utils/
-src/index.js
+.swagger-codegen-ignore
+utils
+index.js
+package.json
