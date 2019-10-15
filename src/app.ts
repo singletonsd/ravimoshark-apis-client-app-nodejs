@@ -34,10 +34,7 @@ const options = {
 };
 
 // TODO: change the path of the documentation to URL of gitlab.
-const spec = fs.readFileSync(
-  path.join(__dirname, "../src/api/swagger.yaml"),
-  "utf8"
-);
+const spec = fs.readFileSync(path.join(__dirname, "../src/api/swagger.yaml"), "utf8");
 const swaggerDoc = jsyaml.safeLoad(spec);
 
 if (process.env.SWAGGER_HOST) {
@@ -91,14 +88,14 @@ app.use(helmet.xssFilter());
 app.use(helmet.frameguard());
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 connectionFunction
-    .then(async (connection) => {
+    .then(async () => {
         swaggerTools.configure(options);
         swaggerTools.initialize(swaggerDoc, app, () => {
             LoggerUtility.debug("Swagger OAS middleware initialized.");
         });
     })
     .catch((error) => {
-        LoggerUtility.error("TYPEORM: Error conneting with DB.");
+        LoggerUtility.error("TYPEORM: Error connecting with DB.");
         LoggerUtility.error(error);
         process.exit(1);
     });
