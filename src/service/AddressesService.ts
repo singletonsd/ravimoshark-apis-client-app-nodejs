@@ -3,6 +3,7 @@
 import { getConnection } from "typeorm";
 import { Addresses } from "../databases/entities";
 import { DatabaseUtilities } from "../databases/utils/DatabaseUtils";
+import { Metadata } from "../models";
 import { LoggerUtility } from "../utils/LoggerUtility";
 import { ParametersComplete, ParametersIdDeleted, Utilities } from "../utils/utilities";
 import { VALID_RESPONSES } from "../utils/ValidResponses";
@@ -72,7 +73,7 @@ export class AddressesService {
    * deleted Deleted Get all, deleted, not deleted data. Default not deleted. (optional)
    * returns Addresses
    */
-  public static getById(params: ParametersIdDeleted) {
+  public static getById(params: ParametersIdDeleted): Promise<Addresses>  {
     const FUNCTION_NAME = "getById";
     const logHeader = `${SERVICE_NAME}: ${FUNCTION_NAME} -`;
     return new Promise<Addresses>(async (resolve, reject) => {
@@ -104,7 +105,7 @@ export class AddressesService {
    * refClient String Data from a desired contract (optional)
    * returns inline_response_200
    */
-  public static get(params: ParametersComplete) {
+  public static get(params: ParametersComplete): Promise<{metadata: Metadata, items: Array<Addresses>}>  {
     const FUNCTION_NAME = "get";
     const logHeader = `${SERVICE_NAME}: ${FUNCTION_NAME} -`;
     return new Promise(async (resolve, reject) => {

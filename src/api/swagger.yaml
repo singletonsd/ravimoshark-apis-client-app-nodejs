@@ -24,8 +24,8 @@ tags:
   - name: Clients
     description: Operations about clients.
 servers:
-  - url: 'http://localhost:8000'
   - url: 'http://localhost:8002'
+  - url: 'http://localhost:8000'
   - url: 'https://ravimoshark.com/back/apis/client/v1'
   - url: 'https://ravimoshark.com/back/apis/client/latest'
 paths:
