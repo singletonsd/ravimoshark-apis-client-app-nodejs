@@ -1,8 +1,9 @@
-import { BaseEntity, FindManyOptions, FindOneOptions, ObjectType } from "typeorm";
+import { BaseEntity, FindManyOptions, FindOneOptions, Like, ObjectType } from "typeorm";
 import { Deleted } from "../../models";
 import { LoggerUtility } from "../../utils/LoggerUtility";
 import { ParametersComplete } from "../../utils/utilities";
 import { Addresses, Clients } from "../entities";
+import { WhereObject } from "./DatabaseCustomTypes";
 
 export class DatabaseUtilities {
   public static getFindOneObject(id: number | string, deleted: Deleted, entity: ObjectType<BaseEntity>
@@ -23,14 +24,7 @@ export class DatabaseUtilities {
   public static getFindObject(
     params: ParametersComplete, entity: ObjectType<BaseEntity>,
     relations?: Array<string>, selections?: Array<string>): FindManyOptions {
-    let whereObject: { idUser?: number } = {};
-    if (params.filter) {
-      try {
-        whereObject = JSON.parse(params.filter);
-      } catch (e) {
-        LoggerUtility.warn("orderBy parameter provided is not in JSON format.", params.orderBy);
-      }
-    }
+    const whereObject = this.addWhereCondition(entity, params.filterBy);
     const object: FindManyOptions<typeof entity> = {
       skip: params.skip,
       take: params.limit,
@@ -55,6 +49,27 @@ export class DatabaseUtilities {
     object.relations = this.addRelations(entity, relations);
     // object.select = this.addSelections(entity, selections);
     return object;
+  }
+
+  public static addWhereCondition(entity: ObjectType<BaseEntity>, filter: string
+                                , whereObject: WhereObject = { }): any {
+    if (!filter) {
+      return whereObject;
+    }
+    filter = filter.toLocaleUpperCase();
+    try {
+      whereObject = JSON.parse(filter);
+      return whereObject;
+    } catch (e) {
+      LoggerUtility.warn("filterBy parameter provided is not in JSON format.", filter);
+    }
+    if (entity === Addresses) {
+      // whereObject = `refClient LIKE %${filter}%`;
+      whereObject.client = Like(`%${filter}%`);
+    } else if (entity === Clients) {
+      whereObject.refClient = Like(`%${filter}%`);
+    }
+    return whereObject;
   }
 
   public static addDeletedParam(deleted: Deleted, params: any): object {
