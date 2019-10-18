@@ -15,7 +15,7 @@ export class Addresses {
     public client?: Clients | null;
 
     @RelationId((clientsAddress: Addresses) => clientsAddress.client)
-    public refClientId?: string;
+    public refClient?: string;
 
     @Column("nvarchar", {
         length: 100,
