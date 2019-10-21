@@ -11,6 +11,28 @@ import { VALID_RESPONSES } from "../utils/ValidResponses";
 const SERVICE_NAME = "AddressesService";
 export class AddressesService {
 
+    /**
+     *  Check if a machine exits.
+     * @param id
+     */
+    public static exists(id: number): Promise<boolean> {
+      const FUNCTION_NAME = "exists";
+      const logHeader = `${SERVICE_NAME}: ${FUNCTION_NAME} -`;
+      return new Promise<boolean>(async (resolve) => {
+          const previous = await getConnection().manager.findOne(Addresses, {
+              select: [ "id" ],
+              where: { id }
+          });
+          if (!previous) {
+              LoggerUtility.warn(`${logHeader} ${VALID_RESPONSES.ERROR.NOT_EXIST.ADDRESS} ${id}`);
+              resolve(false);
+              return;
+          }
+          resolve(true);
+          return;
+      });
+  }
+
   /**
    * Add one address.
    * Add one address.
