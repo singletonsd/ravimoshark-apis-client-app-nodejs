@@ -12,6 +12,28 @@ const SERVICE_NAME = "ClientsService";
 export class ClientsService {
 
   /**
+   *  Check if a location exits.
+   * @param refClient
+   */
+  public static exists(refClient: string): Promise<boolean> {
+    const FUNCTION_NAME = "exists";
+    const logHeader = `${SERVICE_NAME}: ${FUNCTION_NAME} -`;
+    return new Promise<boolean>(async (resolve, reject) => {
+      const previous = await getConnection().manager.findOne(Clients, {
+        select: [ "refClient" ],
+        where: { refClient }
+      });
+      if (!previous) {
+        LoggerUtility.warn(`${logHeader} ${VALID_RESPONSES.ERROR.NOT_EXIST.CLIENT} ${refClient}`);
+        resolve(false);
+        return;
+      }
+      resolve(true);
+      return;
+    });
+  }
+
+  /**
    * Add one client.
    * Add one client.
    *
